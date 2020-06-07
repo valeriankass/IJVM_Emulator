@@ -1,6 +1,7 @@
 #include "ijvm.h"
 #include "util.h"
 #include "binaryparser.h"
+#include "instructions.h"
 #include <stdio.h>
 #include <unistd.h>
 
@@ -33,17 +34,24 @@ void destroy_ijvm()
 
 void run()
 {
-  // Step while you can
+    while (p_counter <= text.size)
+    {
+        step();
+    }
 }
 
 int text_size(void) //Returns the size of the currently loaded program text
 {
-    return text.size;
+    return (int) text.size;
 }
 
 byte_t *get_text(void) //Returns the currently loaded program text as a byte array.
 {
     return text.data;
+}
+word_t get_constant(int i) //work on it by transferring the byte_t to word_t
+{
+    return constant_pool.data[i];
 }
 
 int get_program_counter(void) //Returns the value of the program counter (as an offset from the first instruction).
@@ -53,7 +61,7 @@ int get_program_counter(void) //Returns the value of the program counter (as an 
 bool step(void) //perform one instruction and return true or false
 {
     byte_t instruction = get_instruction();
-    if (p_counter <= text.size - 1)
+    if (p_counter <= text.size)
     {
         switch (instruction)
         {
@@ -111,10 +119,10 @@ bool step(void) //perform one instruction and return true or false
             case OP_LDC_W :
                 LDC_W();
                 break;
-            case 'OP_NOP' :
+            case OP_NOP :
                 NOP();
                 break;
-            case 'OP_OUT' :
+            case OP_OUT :
                 OUT();
                 break;
             case OP_POP :
@@ -131,6 +139,7 @@ bool step(void) //perform one instruction and return true or false
                 break;
         }
         return 1;
+        p_counter += 1;
     }
     else { return 0; }
 }

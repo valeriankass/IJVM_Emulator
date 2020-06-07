@@ -7,6 +7,7 @@
 typedef uint8_t byte_t; /* raw memory will be typed as uint8 */
 typedef int32_t word_t; /* the basic unit of the ijvm will be an int32 */
 
+
 #define MAGIC_NUMBER 0x1DEADFAD
 
 #define OP_BIPUSH         ((byte_t) 0x10)
