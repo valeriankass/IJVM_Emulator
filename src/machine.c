@@ -2,14 +2,18 @@
 #include "util.h"
 #include "binaryparser.h"
 #include "instructions.h"
+#include "stack.h"
+#include "machine.h"
 #include <stdio.h>
 #include <unistd.h>
 
-int p_counter = 0;
 
 int init_ijvm(char *binary_file)
 {
     FILE *fp;
+    p_counter = 0;
+    file_in = stdin;
+    file_out = stdout;
 
     if (!(fp = fopen(binary_file, "r"))) //opening file and checking if it was opened successfully
     {
@@ -22,19 +26,42 @@ int init_ijvm(char *binary_file)
         return -1;
     }
     if (!magic_bytes(fp)) {
-        fprintf(stderr, "Magic Bytes ");
+        fprintf(stderr, "No magic bytes.");
         return -1;
     }
-
     constant_pool = load_binary(fp);
     text = load_binary(fp);
+    Stack_t create_stack();
+
     fclose(fp);
     return 0;
 }
 
+word_t tos(void) //returns a word on top of the stack of current frame
+{
+    return stack.array[stack.top - 1];
+}
+/**
+ * Returns the stack of the current frame as an array of integers,
+ * with entry[0] being the very bottom of the stack and
+ * entry[stack_size() - 1] being the top.
+ **/
+word_t *get_stack(void)
+{
+    return stack.array;
+}
+int stack_size(void)
+{
+    return stack.size;
+}
+word_t get_local_variable(int i) //TODO
+{
+    return 0;
+}
 void destroy_ijvm()
 {
-  // Reset IJVM state
+    clear_binaryparser();
+    clear_stack();
 }
 
 void run()
@@ -127,6 +154,8 @@ bool step(void) //perform one instruction and return true or false
             case OP_NOP :
                 NOP();
                 break;
+            case OP_IN :
+                IN();
             case OP_OUT :
                 OUT();
                 break;
@@ -156,10 +185,10 @@ byte_t get_instruction(void) //return The value of the current instruction repre
 
 void set_input(FILE *fp)
 {
-  // TODO: implement me
+    file_in = fp;
 }
 
 void set_output(FILE *fp)
 {
-  // TODO: implement me
+    file_out = fp;
 }

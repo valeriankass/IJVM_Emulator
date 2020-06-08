@@ -12,13 +12,14 @@ typedef struct Block {
     uint8_t *data;
 }Block_t;
 
-Block_t constant_pool;
-Block_t text;
 uint32_t magic_byte;
 
+Block_t constant_pool;
+Block_t text;
+
 Block_t load_binary(FILE *fp);
-uint32_t swap_uint32(uint32_t num);
 bool magic_bytes(FILE *fp);
+void clear_binaryparser();
 
 
 #endif

@@ -24,11 +24,6 @@ Block_t load_binary(FILE *fp) {
     return block;
 }
 
-uint32_t swap_uint32(uint32_t num)
-{
-    return ((num>>24)&0xff) | ((num<<8)&0xff0000) |((num>>8)&0xff00) | ((num<<24)&0xff000000);
-}
-
 bool magic_bytes(FILE *fp)
 {
     if (!fread(&magic_byte, sizeof(uint32_t), 1, fp))
@@ -42,4 +37,10 @@ bool magic_bytes(FILE *fp)
         return 0;
     }
     return 1;
+}
+
+void clear_binaryparser()
+{
+    free(constant_pool.data);
+    free(text.data);
 }
