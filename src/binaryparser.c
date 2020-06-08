@@ -38,6 +38,7 @@ bool magic_bytes(FILE *fp)
     magic_byte = swap_uint32(magic_byte);
     if (magic_byte != MAGIC_NUMBER)
     {
+        fprintf(stderr, "The magic byte is not equivalent of the magic number.");
         return 0;
     }
     return 1;
