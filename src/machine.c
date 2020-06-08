@@ -21,8 +21,13 @@ int init_ijvm(char *binary_file)
         fprintf(stderr, "The file does not exist.");
         return -1;
     }
-    Block_t constant_pool = load_binary(fp);
-    Block_t text = load_binary(fp);
+    if (!magic_bytes(fp)) {
+        fprintf(stderr, "Magic Bytes ");
+        return -1;
+    }
+
+    constant_pool = load_binary(fp);
+    text = load_binary(fp);
     fclose(fp);
     return 0;
 }
@@ -42,7 +47,7 @@ void run()
 
 int text_size(void) //Returns the size of the currently loaded program text
 {
-    return (int) text.size;
+    return text.size;
 }
 
 byte_t *get_text(void) //Returns the currently loaded program text as a byte array.

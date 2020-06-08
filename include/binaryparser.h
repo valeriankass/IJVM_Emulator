@@ -14,12 +14,11 @@ typedef struct Block {
 
 Block_t constant_pool;
 Block_t text;
+uint32_t magic_byte;
 
-FILE *fp;
-long int file_size;
-
-uint32_t swap_uint32(uint32_t num);
 Block_t load_binary(FILE *fp);
+uint32_t swap_uint32(uint32_t num);
+bool magic_bytes(FILE *fp);
 
 
 #endif
