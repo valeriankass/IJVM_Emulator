@@ -1,15 +1,15 @@
 #include "stack.h"
 
-Stack_t create_stack(size_t size)
+void create_stack(size_t size)
 {
-    stack.top = -1;
+    stack.top = 0;
     stack.size = size;
     if (!(stack.array = (int32_t*)malloc(sizeof(int32_t) * stack.size)))
     {
         fprintf(stderr, "Error in memory allocation of stack array.");
     }
 
-    return stack;
+    //return stack;
 }
 
 void push(int32_t word)

@@ -31,7 +31,7 @@ int init_ijvm(char *binary_file)
     }
     constant_pool = load_binary(fp);
     text = load_binary(fp);
-    Stack_t create_stack();
+    create_stack(10000);
 
     fclose(fp);
     return 0;
