@@ -31,7 +31,8 @@ int init_ijvm(char *binary_file)
     }
     constant_pool = load_binary(fp);
     text = load_binary(fp);
-    create_stack(10000);
+
+    create_stack(16);
 
     fclose(fp);
     return 0;
@@ -52,7 +53,7 @@ word_t *get_stack(void)
 }
 int stack_size(void)
 {
-    return stack.size;
+    return stack.top;
 }
 word_t get_local_variable(int i) //TODO
 {
@@ -93,89 +94,86 @@ int get_program_counter(void) //Returns the value of the program counter (as an 
 bool step(void) //perform one instruction and return true or false
 {
     byte_t instruction = get_instruction();
-    if (p_counter <= text.size)
+    switch (instruction)
     {
-        switch (instruction)
-        {
-            case OP_BIPUSH :
-                BIPUSH();
-                break;
-            case OP_DUP :
-                DUP();
-                break;
-            case OP_ERR :
-                ERR();
-                break;
-            case OP_GOTO :
-                GOTO();
-                break;
-            case OP_HALT :
-                HALT();
-                break;
-            case OP_IADD :
-                IADD();
-                break;
-            case OP_IAND :
-                IAND();
-                break;
-            case OP_IFEQ :
-                IFEQ();
-                break;
-            case OP_IFLT :
-                IFLT();
-                break;
-            case OP_ICMPEQ :
-                ICMPEQ();
-                break;
-            case OP_IINC :
-                IINC();
-                break;
-            case OP_ILOAD :
-                ILOAD();
-                break;
-            case OP_INVOKEVIRTUAL :
-                INVOKEVIRTUAL();
-                break;
-            case OP_IOR :
-                IOR();
-                break;
-            case OP_IRETURN :
-                IRETURN();
-                break;
-            case OP_ISTORE :
-                ISTORE();
-                break;
-            case OP_ISUB :
-                ISUB();
-                break;
-            case OP_LDC_W :
-                LDC_W();
-                break;
-            case OP_NOP :
-                NOP();
-                break;
-            case OP_IN :
-                IN();
-            case OP_OUT :
-                OUT();
-                break;
-            case OP_POP :
-                POP();
-                break;
-            case OP_SWAP :
-                SWAP();
-                break;
-            case OP_WIDE :
-                WIDE();
-                break;
-            default:
-                return 0;
-                break;
-        }
-        return 1;
-        p_counter += 1;
+        case OP_BIPUSH :
+            BIPUSH((int8_t)text.data[p_counter + 1]);
+            p_counter += 1;
+            break;
+        case OP_DUP :
+            DUP();
+            break;
+        case OP_ERR :
+            ERR();
+            break;
+        case OP_GOTO :
+            GOTO();
+            break;
+        case OP_HALT :
+            return false;
+            break;
+        case OP_IADD :
+            IADD();
+            break;
+        case OP_IAND :
+            IAND();
+            break;
+        case OP_IFEQ :
+            IFEQ();
+            break;
+        case OP_IFLT :
+            IFLT();
+            break;
+        case OP_ICMPEQ :
+            ICMPEQ();
+            break;
+        case OP_IINC :
+            IINC();
+            break;
+        case OP_ILOAD :
+            ILOAD();
+            break;
+        case OP_INVOKEVIRTUAL :
+            INVOKEVIRTUAL();
+            break;
+        case OP_IOR :
+            IOR();
+            break;
+        case OP_IRETURN :
+            IRETURN();
+            break;
+        case OP_ISTORE :
+            ISTORE();
+            break;
+        case OP_ISUB :
+            ISUB();
+            break;
+        case OP_LDC_W :
+            LDC_W();
+            break;
+        case OP_NOP :
+            NOP();
+            break;
+        case OP_IN :
+            IN();
+        case OP_OUT :
+            OUT();
+            break;
+        case OP_POP :
+            POP();
+            break;
+        case OP_SWAP :
+            SWAP();
+            break;
+        case OP_WIDE :
+            WIDE();
+            break;
+        default:
+            return 0;
+            break;
     }
-    else { return 0; }
+    p_counter += 1;
+    return 1;
 }
 
 byte_t get_instruction(void) //return The value of the current instruction represented as a byte_t

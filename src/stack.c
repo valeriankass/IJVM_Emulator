@@ -1,39 +1,32 @@
 #include "stack.h"
 
-void create_stack(size_t size)
+void create_stack(int size)
 {
     stack.top = 0;
     stack.size = size;
-    if (!(stack.array = (int32_t*)malloc(sizeof(int32_t) * stack.size)))
+    stack.array = malloc(sizeof(int32_t) * stack.size);
+    if (stack.array == NULL)
     {
         fprintf(stderr, "Error in memory allocation of stack array.");
     }
-
-    //return stack;
 }
 
 void push(int32_t word)
 {
     if (stack_is_full())
     {
-        fprintf(stderr, "Push is not possible: the stack is full.");
+        stack.size *= 2;
+        stack.array = realloc(stack.array, (size_t)stack.size * sizeof(word_t));
+        if(stack.array == NULL) {
+          fprintf(stderr, "%s", "ERROR (push): stack.data == NULL\n");
+          exit(1);
+        }
     }
-    else stack.array[stack.top++] = word;
+    stack.array[stack.top++] = word;
 }
 int32_t pop()
 {
-    int32_t popped_top = 0;
-
-    if (stack_is_empty())
-    {
-        fprintf(stderr, "Pop is not possible: the stack is empty.");
-    }
-    else
-    {
-        popped_top = stack.top;
-        stack.top -= 1;
-    }
-    return popped_top;
+    return stack.array[--stack.top];
 }
 void clear_stack()
 {

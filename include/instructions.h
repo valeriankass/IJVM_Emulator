@@ -13,7 +13,6 @@ void BIPUSH();
 void DUP();
 void ERR();
 void GOTO();
-void HALT();
 void IADD();
 void IAND();
 void IFEQ();

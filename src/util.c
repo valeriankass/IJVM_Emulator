@@ -8,7 +8,7 @@ uint32_t swap_uint32(uint32_t num)
 
 bool stack_is_full()
 {
-    if (stack.top >= stack.size - 1) { return 1; }
+    if (stack.top >= stack.size) { return 1; }
     else return 0;
 }
 
