@@ -107,7 +107,7 @@ bool step(void) //perform one instruction and return true or false
             ERR();
             break;
         case OP_GOTO :
-            GOTO();
+            increase_p_counter_by(get_offset() - 1);
             break;
         case OP_HALT :
             return false;
@@ -119,10 +119,10 @@ bool step(void) //perform one instruction and return true or false
             IAND();
             break;
         case OP_IFEQ :
-            IFEQ();
+            if (pop() == 0) increase_p_counter_by(get_offset() - 1);
             break;
         case OP_IFLT :
-            IFLT();
+            if (pop() < 0) increase_p_counter_by(get_offset() - 1);
             break;
         case OP_ICMPEQ :
             ICMPEQ();

@@ -6,7 +6,10 @@ void BIPUSH(int32_t int_1)
 }
 void DUP(){}
 void ERR(){}
-void GOTO(){}
+/*void GOTO()
+{
+    increase_p_counter_by(get_offset() - 1); // offset - 1 byte
+}*/
 void IADD()
 {
     int32_t int_1, int_2;
@@ -23,9 +26,18 @@ void IAND()
     int_2 = pop();
     push(int_1 & int_2);
 }
-void IFEQ(){}
-void IFLT(){}
-void ICMPEQ(){}
+/*void IFEQ()
+{
+    if (pop() == 0) increase_p_counter_by(get_offset() - 1);
+}*/
+/*void IFLT(){}*/
+void ICMPEQ()
+{
+    int32_t word_1 = pop();
+    int32_t word_2 = pop();
+
+    if (word_1 == word_2) increase_p_counter_by(get_offset() - 1);
+}
 void IINC(){}
 void ILOAD(){}
 void INVOKEVIRTUAL(){}

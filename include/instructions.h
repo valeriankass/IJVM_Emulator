@@ -5,6 +5,7 @@
 #include "util.h"
 #include "stack.h"
 #include "machine.h"
+#include "binaryparser.h"
 #include <stdint.h>
 #include <unistd.h>
 #include <stdio.h>
@@ -32,5 +33,6 @@ void OUT();
 void POP();
 void SWAP();
 void WIDE();
+short get_offset();
 
 #endif
