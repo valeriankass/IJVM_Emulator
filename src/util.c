@@ -25,12 +25,12 @@ bool stack_is_empty()
 
 unsigned short byte_to_unsigned_short(uint8_t *data)
 {
-    return (data[0] << 8) | data[1];
+    return (unsigned short) (data[0] << 8) | data[1];
 }
 
 short byte_to_signed_short(uint8_t *data)
 {
-    return ((data[2] << 8) & 0xff00) | (data[3] & 0xff);
+    return (short) ((data[0] << 8) & 0xff00) | (data[1] & 0xff);
 }
 
 short get_offset()
