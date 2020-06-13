@@ -20,5 +20,6 @@ bool stack_is_empty();
 unsigned short byte_to_unsigned_short(uint8_t *data);
 short byte_to_signed_short(uint8_t *data);
 short get_offset();
+bool instruction_is_valid();
 
 #endif

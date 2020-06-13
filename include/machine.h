@@ -7,6 +7,7 @@
 #include <stdlib.h>
 
 int p_counter;
+byte_t instruction;
 FILE *file_out;
 FILE *file_in;
 

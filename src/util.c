@@ -42,3 +42,31 @@ short get_offset()
         return 0;
     }
 }
+bool instruction_is_valid()
+{
+    if (instruction == OP_BIPUSH ||
+    instruction == OP_DUP ||
+    instruction == OP_ERR ||
+    instruction == OP_GOTO ||
+    instruction == OP_HALT ||
+    instruction == OP_IADD ||
+    instruction == OP_IAND ||
+    instruction == OP_IFEQ ||
+    instruction == OP_IFLT ||
+    instruction == OP_ICMPEQ ||
+    instruction == OP_IINC ||
+    instruction == OP_ILOAD ||
+    instruction == OP_INVOKEVIRTUAL ||
+    instruction == OP_IOR ||
+    instruction == OP_IRETURN ||
+    instruction == OP_ISTORE ||
+    instruction == OP_ISUB ||
+    instruction == OP_LDC_W ||
+    instruction == OP_NOP ||
+    instruction == OP_IN ||
+    instruction == OP_OUT ||
+    instruction == OP_POP ||
+    instruction == OP_SWAP ||
+    instruction == OP_WIDE) return 1;
+    else return 0;
+}

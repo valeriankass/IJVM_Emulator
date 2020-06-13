@@ -7,7 +7,6 @@
 #include <stdio.h>
 #include <unistd.h>
 
-
 int init_ijvm(char *binary_file)
 {
     FILE *fp;
@@ -72,6 +71,19 @@ void run()
         step();
     }
 }
+/**
+ * Check whether the machine has any more instructions to execute.
+ *
+ * A machine will stop running after:
+ * - reaching the end of the text section
+ * - encountering either the HALT/ERR instructions
+ * - encountering an invalid instruction
+ */
+bool finished()
+{
+    if (&text.data[stack.size - 1] == NULL || instruction == OP_HALT || instruction == OP_ERR || instruction_is_valid()) return 1;
+    else return 0;
+}
 
 int text_size(void) //Returns the size of the currently loaded program text
 {
@@ -93,7 +105,7 @@ int get_program_counter(void) //Returns the value of the program counter (as an 
 }
 bool step(void) //perform one instruction and return true or false
 {
-    byte_t instruction = get_instruction();
+    instruction = get_instruction();
     switch (instruction)
     {
         case OP_BIPUSH :
