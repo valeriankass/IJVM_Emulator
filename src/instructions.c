@@ -4,7 +4,10 @@ void BIPUSH(int32_t int_1)
 {
     push(int_1);
 }
-void DUP(){}
+void DUP()
+{
+    push(tos());
+}
 void ERR(){}
 /*void GOTO()
 {
@@ -26,17 +29,23 @@ void IAND()
     int_2 = pop();
     push(int_1 & int_2);
 }
-/*void IFEQ()
+void IFEQ()
 {
     if (pop() == 0) increase_p_counter_by(get_offset() - 1);
-}*/
-/*void IFLT(){}*/
+    else increase_p_counter_by(2);
+}
+void IFLT()
+{
+    if (pop() < 0) increase_p_counter_by(get_offset() - 1);
+    else increase_p_counter_by(2);
+}
 void ICMPEQ()
 {
     int32_t word_1 = pop();
     int32_t word_2 = pop();
 
     if (word_1 == word_2) increase_p_counter_by(get_offset() - 1);
+    else increase_p_counter_by(2);
 }
 void IINC(){}
 void ILOAD(){}

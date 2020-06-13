@@ -25,17 +25,17 @@ bool stack_is_empty()
 
 unsigned short byte_to_unsigned_short(uint8_t *data)
 {
-    return (unsigned short) (data[0] << 8) | data[1];
+    return (unsigned short)((data[0] << 8) | data[1]);
 }
 
 short byte_to_signed_short(uint8_t *data)
 {
-    return (short) ((data[0] << 8) & 0xff00) | (data[1] & 0xff);
+    return (short)((data[0] << 8) | data[1]);
 }
 
 short get_offset()
 {
-    if (p_counter < text.size) return byte_to_signed_short(&text.data[p_counter + 1]);
+    if (p_counter <= text.size) return byte_to_signed_short(&text.data[p_counter + 1]);
     else
     {
         fprintf(stderr, "The counter is larger or equal to the text block size.");
