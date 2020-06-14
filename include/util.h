@@ -19,7 +19,9 @@ bool stack_is_full();
 bool stack_is_empty();
 unsigned short byte_to_unsigned_short(uint8_t *data);
 short byte_to_signed_short(uint8_t *data);
-short get_offset();
+short get_signed_offset_byte_size();
+unsigned short get_unsigned_offset_byte_size();
 bool instruction_is_valid();
+int32_t bytes_to_word(uint8_t *bytes);
 
 #endif

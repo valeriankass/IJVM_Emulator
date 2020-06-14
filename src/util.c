@@ -33,7 +33,7 @@ short byte_to_signed_short(uint8_t *data)
     return (short)((data[0] << 8) | data[1]);
 }
 
-short get_offset()
+short get_signed_offset_byte_size()
 {
     if (p_counter <= text.size) return byte_to_signed_short(&text.data[p_counter + 1]);
     else
@@ -42,6 +42,20 @@ short get_offset()
         return 0;
     }
 }
+unsigned short get_unsigned_offset_byte_size()
+{
+    if (p_counter <= text.size) return byte_to_unsigned_short(&text.data[p_counter + 1]);
+    else
+    {
+        fprintf(stderr, "The counter is larger or equal to the text block size.");
+        return 0;
+    }
+}
+int32_t bytes_to_word(uint8_t *bytes)
+{
+    return (int32_t) ((bytes[0] << 24) | (bytes[1] << 16) | (bytes[2] << 8) | bytes[3]);
+}
+
 bool instruction_is_valid()
 {
     if (instruction == OP_BIPUSH ||

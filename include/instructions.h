@@ -6,6 +6,7 @@
 #include "stack.h"
 #include "machine.h"
 #include "binaryparser.h"
+#include "frame.h"
 #include <stdint.h>
 #include <unistd.h>
 #include <stdio.h>
