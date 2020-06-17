@@ -1,5 +1,5 @@
-#ifndef BINARYPARSER_H
-#define BINARYPARSER_H
+#ifndef FRAME_H
+#define FRAME_H
 
 #include "ijvm.h"
 #include "util.h"
@@ -18,7 +18,9 @@ typedef struct Frame
     struct Frame *next;
 }Frame_t;
 
-Frame_t *frame;
-
+//Frame_t *frame;
+Frame_t *current_frame;
+Frame_t *init_frame(int current_top, int current_size, int current_p_counter);
+Frame_t *get_current_frame();
 
 #endif

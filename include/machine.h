@@ -11,5 +11,4 @@ byte_t instruction;
 FILE *file_out;
 FILE *file_in;
 
-
 #endif

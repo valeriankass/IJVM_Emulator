@@ -1,5 +1,6 @@
 #include "instructions.h"
 #include "frame.h"
+#include "machine.h"
 
 void BIPUSH(int32_t int_1)
 {
@@ -10,10 +11,6 @@ void DUP()
     push(tos());
 }
 void ERR(){}
-/*void GOTO()
-{
-    increase_p_counter_by(get_offset() - 1); // offset - 1 byte
-}*/
 void IADD()
 {
     int32_t int_1, int_2;
@@ -54,9 +51,9 @@ void IINC() //TODO
 }
 void ILOAD() //TODO
 {
-    unsigned short index = get_unsigned_offset_byte_size();
-    push(frame->variable[index]);
-    increase_p_counter_by(2);
+    int index = text.data[p_counter + 1];
+    push(get_local_variable(index));
+    increase_p_counter_by(1);
 }
 void INVOKEVIRTUAL(){}
 void IOR()
@@ -70,7 +67,15 @@ void IOR()
 void IRETURN(){}
 void ISTORE() //TODO
 {
-
+    int index = text.data[p_counter + 1];
+    Frame_t *frame = get_current_frame();
+    if ((index + 1) > frame->size)
+    {
+        frame->size = (index + 1);
+        frame->variable = realloc(frame->variable, (size_t)(frame->size) * sizeof(word_t));
+    }
+    frame->variable[index] = pop();
+    increase_p_counter_by(1);
 }
 void ISUB()
 {
@@ -121,3 +126,4 @@ void WIDE() //TODO: READ INSTRUCTIONS FOR WIDE ON ASSIGNMENT 2
 {
 
 }
+
