@@ -32,7 +32,7 @@ int init_ijvm(char *binary_file)
     constant_pool = load_binary(fp);
     text = load_binary(fp);
 
-    current_frame = init_frame(0, 0, 0);
+    current_frame = init_frame();
     create_stack(16);
 
     fclose(fp);
@@ -65,10 +65,7 @@ void destroy_ijvm()
 
 void run()
 {
-    while (p_counter <= text.size)
-    {
-        step();
-    }
+    while (p_counter <= text.size) if (!step()) break;
 }
 /**
  * Check whether the machine has any more instructions to execute.
@@ -101,7 +98,6 @@ word_t get_constant(int i) //work on it by transferring the byte_t to word_t TOD
         fprintf(stderr, "The i is larger than the constant pool size.");
         destroy_ijvm();
     }
-    index = i * (int)sizeof(word_t);
     return bytes_to_word(&constant_pool.data[index]);
 }
 
@@ -115,98 +111,98 @@ bool step(void) //perform one instruction and return true or false
     switch (instruction)
     {
         case OP_BIPUSH :
-            //printf("BIPUSH\n");
+            printf("BIPUSH\n");
             BIPUSH((int8_t)text.data[p_counter + 1]);
             increase_p_counter_by(1); //might want to put it inside function BIPUSH
             break;
         case OP_DUP :
-            //printf("DUP\n");
+            printf("DUP\n");
             DUP();
             break;
         case OP_ERR :
-            //printf("ERR\n");
+            printf("ERR\n");
             ERR();
             break;
         case OP_GOTO :
-            //printf("GOTO\n");
+            printf("GOTO\n");
             increase_p_counter_by(get_signed_offset_byte_size() - 1);
             break;
         case OP_HALT :
             return false;
             break;
         case OP_IADD :
-            //printf("IADD\n");
+            printf("IADD\n");
             IADD();
             break;
         case OP_IAND :
-            //printf("IAND\n");
+            printf("IAND\n");
             IAND();
             break;
         case OP_IFEQ :
-            //printf("IFEQ\n");
+            printf("IFEQ\n");
             IFEQ();
             break;
         case OP_IFLT :
-            //printf("IFLT\n");
+            printf("IFLT\n");
             IFLT();
             break;
         case OP_ICMPEQ :
-            //printf("ICMPEQ\n");
+            printf("ICMPEQ\n");
             ICMPEQ();
             break;
         case OP_IINC :
-            //printf("IINC\n");
+            printf("IINC\n");
             IINC();
             break;
         case OP_ILOAD :
-            //printf("ILOAD\n");
+            printf("ILOAD\n");
             ILOAD();
             break;
         case OP_INVOKEVIRTUAL :
-            //printf("INVOKEVIRTUAL\n");
+            printf("INVOKEVIRTUAL\n");
             INVOKEVIRTUAL();
             break;
         case OP_IOR :
-            //printf("IOR\n");
+            printf("IOR\n");
             IOR();
             break;
         case OP_IRETURN :
-            //printf("IRETURN\n");
+            printf("IRETURN\n");
             IRETURN();
             break;
         case OP_ISTORE :
-            //printf("ISTORE\n");
+            printf("ISTORE\n");
             ISTORE();
             break;
         case OP_ISUB :
-            //printf("ISUB\n");
+            printf("ISUB\n");
             ISUB();
             break;
         case OP_LDC_W :
-            //printf("LDC_W\n");
+            printf("LDC_W\n");
             LDC_W();
             break;
         case OP_NOP :
-            //printf("NOP\n");
+            printf("NOP\n");
             NOP();
             break;
         case OP_IN :
-            //printf("IN\n");
+            printf("IN\n");
             IN();
         case OP_OUT :
-            //printf("OUT\n");
+            printf("OUT\n");
             OUT();
             break;
         case OP_POP :
-            //printf("POP\n");
+            printf("POP\n");
             POP();
             break;
         case OP_SWAP :
-            //printf("SWAP\n");
+            printf("SWAP\n");
             SWAP();
             break;
         case OP_WIDE :
-            //printf("WIDE\n");
+            printf("WIDE\n");
             WIDE();
             break;
         default:

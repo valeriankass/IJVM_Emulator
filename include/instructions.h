@@ -33,7 +33,7 @@ void IN();
 void OUT();
 void POP();
 void SWAP();
-void WIDE();
+bool WIDE();
 short get_offset();
 
 #endif

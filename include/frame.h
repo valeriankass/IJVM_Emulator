@@ -11,16 +11,18 @@
 
 typedef struct Frame
 {
-    int top;
-    int size;
     int32_t *variable;
-    int p_counter;
-    struct Frame *next;
+    struct Frame *next; //prev
+    int currentpc;
+    int stackptr;
+
 }Frame_t;
 
 //Frame_t *frame;
 Frame_t *current_frame;
-Frame_t *init_frame(int current_top, int current_size, int current_p_counter);
+Frame_t *init_frame();
 Frame_t *get_current_frame();
+void clear_frame();
+Frame_t *previous_frame();
 
 #endif

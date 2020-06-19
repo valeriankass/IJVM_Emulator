@@ -35,14 +35,14 @@ short byte_to_signed_short(uint8_t *data)
 
 short get_signed_offset_byte_size()
 {
-    if (p_counter <= text.size) return byte_to_signed_short(&text.data[p_counter + 1]);
+    if (p_counter <= text.size) return byte_to_signed_short(&text.data[p_counter + 1]);//can modify so that there will be a variable that can be changed
     else
     {
         fprintf(stderr, "The counter is larger or equal to the text block size.");
         return 0;
     }
 }
-unsigned short get_unsigned_offset_byte_size()
+unsigned short get_unsigned_offset_byte_size() //can modify so that there will be a variable that can be changed
 {
     if (p_counter <= text.size) return byte_to_unsigned_short(&text.data[p_counter + 1]);
     else
