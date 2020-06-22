@@ -13,9 +13,9 @@ typedef struct Frame
 {
     int32_t *variable;
     struct Frame *next; //prev
-    int currentpc;
-    int stackptr;
-
+    int currentp_counter;
+    int top;
+    size_t variable_size;
 }Frame_t;
 
 //Frame_t *frame;

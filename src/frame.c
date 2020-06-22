@@ -1,6 +1,6 @@
 #include "frame.h"
 
-Frame_t *init_frame(int variable, int currentpc, int stackptr)
+Frame_t *init_frame(int variable_size, int currentpc, int stackptr)
 {
     Frame_t *frame;
     frame = (Frame_t*)malloc(sizeof(Frame_t));
@@ -10,8 +10,9 @@ Frame_t *init_frame(int variable, int currentpc, int stackptr)
     if(frame->variable == NULL) fprintf(stderr, "The local variable in frame is empty.");
 
     frame->next = NULL;
-    frame->currentpc = currentpc;
-    frame->stackptr = stackptr;
+    frame->currentp_counter = currentpc;
+    frame->top = stackptr;
+    frame->variable_size = variable_size;
 
     return frame;
 }
@@ -20,7 +21,7 @@ Frame_t *get_current_frame()
 {
     Frame_t *frame = current_frame;
 
-    if (frame->next != NULL) frame = frame->next;
+    while (frame->next != NULL) frame = frame->next;
 
     return frame;
 }

@@ -12,8 +12,8 @@ int init_ijvm(char *binary_file)
 {
     FILE *fp;
     p_counter = 0;
-    file_in = stdin;
-    file_out = stdout;
+    set_input(stdin);
+    set_output(stdout);
 
     if (!(fp = fopen(binary_file, "r"))) //opening file and checking if it was opened successfully
     {
@@ -32,16 +32,22 @@ int init_ijvm(char *binary_file)
     constant_pool = load_binary(fp);
     text = load_binary(fp);
 
-    current_frame = init_frame();
+    current_frame = init_frame(0,0,0);
     create_stack(16);
 
     fclose(fp);
     return 0;
 }
 
-word_t tos(void) //returns a word on top of the stack of current frame
+word_t tos() //returns a word on top of the stack of current frame
 {
-    return stack.array[stack.top - 1];
+    if(stack.top > get_current_frame()->top) return stack.array[stack.top - 1];
+    else
+    {
+        fprintf(stderr, "stack.top <= get_current_frame()->top");
+        destroy_ijvm();
+        exit(1);
+    }
 }
 /**
  * Returns the stack of the current frame as an array of integers,
@@ -189,6 +195,7 @@ bool step(void) //perform one instruction and return true or false
         case OP_IN :
             printf("IN\n");
             IN();
+            break;
         case OP_OUT :
             printf("OUT\n");
             OUT();
@@ -226,4 +233,8 @@ void set_input(FILE *fp)
 void set_output(FILE *fp)
 {
     file_out = fp;
+}
+FILE *get_input()
+{
+    return file_in;
 }

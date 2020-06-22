@@ -50,10 +50,10 @@ void IINC() //TODO
     Frame_t *frame = get_current_frame();
     int index = text.data[p_counter + 1];
 
-    if (sizeof(frame) < index + 1)
+    if (frame->variable_size < index + 1)
     {
-        int new_size = index + 1;
-        frame->variable = realloc(frame->variable, (size_t)(new_size) * sizeof(word_t));
+        frame->variable_size = index + 1;
+        frame->variable = realloc(frame->variable, (size_t)(frame->variable_size) * sizeof(word_t));
     }
     frame->variable[index] += (int8_t)text.data[p_counter + 2];
     increase_p_counter_by(2);
@@ -67,21 +67,21 @@ void ILOAD()
 void INVOKEVIRTUAL()
 {
     	Frame_t *frame;
-    	int currentpc;
-    	int argsCount;
-    	int localVars;
-    	int constantLoc;
+    	int current_p_counter;
+    	int argument_count;
+    	int local_variables;
+    	int constant_location;
 
     	increase_p_counter_by(1);
-    	currentpc = p_counter + 1;
-    	constantLoc = byte_to_unsigned_short(&text.data[p_counter]);
-    	p_counter = get_constant(constantLoc);
-    	argsCount = byte_to_unsigned_short(&text.data[p_counter]);
+    	current_p_counter = p_counter + 1;
+    	constant_location = byte_to_unsigned_short(&text.data[p_counter]);
+    	p_counter = get_constant(constant_location);
+    	argument_count = byte_to_unsigned_short(&text.data[p_counter]);
     	increase_p_counter_by(2);
-    	localVars = byte_to_unsigned_short(&text.data[p_counter]);
+    	local_variables = byte_to_unsigned_short(&text.data[p_counter]);
 
-    	frame = init_frame(argsCount + localVars, currentpc, stack_size() - argsCount);
-    	for (int i = argsCount - 1; i > 0; i--) {
+    	frame = init_frame(argument_count + local_variables, current_p_counter, stack_size() - argument_count);
+    	for (int i = argument_count - 1; i > 0; i--) {
     		frame->variable[i] = pop();
     	}
     	get_current_frame()->next = frame;
@@ -97,31 +97,32 @@ void IOR()
 }
 void IRETURN()
 {
-    	Frame_t *frame = current_frame;
+    	Frame_t *frame = get_current_frame();
     	word_t result = tos();
 
-    	p_counter = frame->currentpc;
-    	if(stack_size() < frame->stackptr) {
+    	p_counter = frame->currentp_counter;
+    	if(stack.size < frame->top) {
             fprintf(stderr, "%s", "ERROR: stack_size() < f->stack_pointer\n");
             destroy_ijvm();
             exit(1);
         }
-        while(stack_size() > frame->stackptr) {
+        while(stack_size() > frame->top) {
     		pop();
     	}
+    	//removing current frame
         previous_frame()->next = NULL;
         if (frame->variable != NULL) free(frame->variable);
         if (frame != NULL) free(frame);
-    	BIPUSH(result);
+    	push(result);
 }
 void ISTORE()
 {
     int index = text.data[p_counter + 1];
     Frame_t *frame = get_current_frame();
-    if (sizeof(frame) < index + 1)
+    if (frame->variable_size < index + 1)
     {
-        int new_size = index + 1;
-        frame->variable = realloc(frame->variable, (size_t)(new_size) * sizeof(word_t));
+        frame->variable_size = (size_t) index + 1;
+        frame->variable = realloc(frame->variable, (size_t)(frame->variable_size) * sizeof(word_t));
     }
     frame->variable[index] = pop();
     increase_p_counter_by(1);
@@ -145,10 +146,7 @@ void IN()
 {
     int input = fgetc(file_in);
 
-    if (input != EOF)
-    {
-        push(input);
-    }
+    if (input != EOF) push(input);
     else push(0);
 }
 void OUT()
@@ -177,26 +175,30 @@ bool WIDE()
     increase_p_counter_by(1);
     switch(text.data[p_counter])
     {
+        case OP_BIPUSH:
+            push(signed_index);
+            increase_p_counter_by(2);
+        break;
         case OP_ILOAD:
             push(get_local_variable(unsigned_index));
             increase_p_counter_by(2);
         break;
         case OP_ISTORE:
 
-            if (sizeof(frame) < unsigned_index + 1)
+            if (frame->variable_size < unsigned_index + 1)
             {
-                int new_size = unsigned_index + 1;
-                frame->variable = realloc(frame->variable, (size_t)(new_size) * sizeof(word_t));
+                frame->variable_size = unsigned_index + 1;
+                frame->variable = realloc(frame->variable, (size_t)(frame->variable_size) * sizeof(word_t));
             }
             frame->variable[unsigned_index] = pop();
             increase_p_counter_by(2);
         break;
         case OP_IINC:
 
-            if (sizeof(frame) < signed_index + 1)
+            if (frame->variable_size < signed_index + 1)
             {
-                int new_size = signed_index + 1;
-                frame->variable = realloc(frame->variable, (size_t)(new_size) * sizeof(word_t));
+                frame->variable_size = signed_index + 1;
+                frame->variable = realloc(frame->variable, (size_t)(frame->variable_size) * sizeof(word_t));
             }
             frame->variable[signed_index] += byte_to_signed_short(&text.data[p_counter + 3]);
             increase_p_counter_by(4);

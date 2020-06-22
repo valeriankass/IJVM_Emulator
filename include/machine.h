@@ -10,5 +10,6 @@ int p_counter;
 byte_t instruction;
 FILE *file_out;
 FILE *file_in;
+FILE *get_input();
 
 #endif
