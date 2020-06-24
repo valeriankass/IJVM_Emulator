@@ -1,6 +1,10 @@
 #ifndef MACHINE_H
 #define MACHINE_H
 
+#define BYTE 1
+#define SHORT 2
+#define WORD 4
+
 #include "ijvm.h"
 #include "util.h"
 #include <stdint.h>

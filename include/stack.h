@@ -19,5 +19,8 @@ void create_stack(int size);
 void push(int32_t word);
 int32_t pop(void);
 void clear_stack(void);
+word_t *get_stack(void);
+int stack_size(void);
+word_t tos();
 
 #endif

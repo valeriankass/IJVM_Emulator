@@ -4,7 +4,8 @@ Frame_t *init_frame(int variable_size, int currentpc, int stackptr)
 {
     Frame_t *frame;
     frame = (Frame_t*)malloc(sizeof(Frame_t));
-    frame->variable = malloc(sizeof(int32_t));
+    frame->variable_size = variable_size;
+    frame->variable = malloc(sizeof(variable_size));
 
     if(frame == NULL) fprintf(stderr, "Frame stack is empty.");
     if(frame->variable == NULL) fprintf(stderr, "The local variable in frame is empty.");
@@ -12,7 +13,6 @@ Frame_t *init_frame(int variable_size, int currentpc, int stackptr)
     frame->next = NULL;
     frame->currentp_counter = currentpc;
     frame->top = stackptr;
-    frame->variable_size = variable_size;
 
     return frame;
 }

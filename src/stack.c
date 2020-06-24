@@ -35,3 +35,21 @@ void clear_stack()
     stack.size = 0;
     stack.array = NULL;
 }
+word_t *get_stack(void)
+{
+    return stack.array;
+}
+int stack_size(void)
+{
+    return stack.top;
+}
+word_t tos() //returns a word on top of the stack of current frame
+{
+    if(stack.top > get_current_frame()->top) return stack.array[stack.top - 1];
+    else
+    {
+        fprintf(stderr, "stack.top <= get_current_frame()->top");
+        destroy_ijvm();
+        return -1;
+    }
+}

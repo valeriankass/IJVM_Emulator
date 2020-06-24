@@ -39,29 +39,13 @@ int init_ijvm(char *binary_file)
     return 0;
 }
 
-word_t tos() //returns a word on top of the stack of current frame
-{
-    if(stack.top > get_current_frame()->top) return stack.array[stack.top - 1];
-    else
-    {
-        fprintf(stderr, "stack.top <= get_current_frame()->top");
-        destroy_ijvm();
-        exit(1);
-    }
-}
+
 /**
  * Returns the stack of the current frame as an array of integers,
  * with entry[0] being the very bottom of the stack and
  * entry[stack_size() - 1] being the top.
  **/
-word_t *get_stack(void)
-{
-    return stack.array;
-}
-int stack_size(void)
-{
-    return stack.top;
-}
+
 void destroy_ijvm()
 {
     clear_binaryparser();
@@ -73,14 +57,6 @@ void run()
 {
     while (p_counter <= text.size) if (!step()) break;
 }
-/**
- * Check whether the machine has any more instructions to execute.
- *
- * A machine will stop running after:
- * - reaching the end of the text section
- * - encountering either the HALT/ERR instructions
- * - encountering an invalid instruction
- */
 bool finished()
 {
     if (&text.data[stack.size - 1] == NULL || instruction == OP_HALT || instruction == OP_ERR || instruction_is_valid()) return 1;
@@ -96,7 +72,7 @@ byte_t *get_text(void) //Returns the currently loaded program text as a byte arr
 {
     return text.data;
 }
-word_t get_constant(int i) //work on it by transferring the byte_t to word_t TODO
+word_t get_constant(int i) //work on it by transferring the byte_t to word_t
 {
     long index = i * (int)sizeof(int32_t);
 
@@ -111,7 +87,7 @@ int get_program_counter(void) //Returns the value of the program counter (as an 
 {
     return p_counter;
 }
-bool step(void) //perform one instruction and return true or false
+bool step(void) //perform one instruction and return true or false //move it somewhere else
 {
     instruction = get_instruction();
     switch (instruction)
@@ -220,7 +196,7 @@ bool step(void) //perform one instruction and return true or false
     return 1;
 }
 
-byte_t get_instruction(void) //return The value of the current instruction represented as a byte_t
+byte_t get_instruction() //return The value of the current instruction represented as a byte_t
 {
     return text.data[p_counter];
 }
@@ -233,8 +209,4 @@ void set_input(FILE *fp)
 void set_output(FILE *fp)
 {
     file_out = fp;
-}
-FILE *get_input()
-{
-    return file_in;
 }

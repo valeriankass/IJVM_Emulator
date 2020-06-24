@@ -86,6 +86,7 @@ void INVOKEVIRTUAL()
     	}
     	get_current_frame()->next = frame;
     	p_counter++;
+    	//make func print local var print value and print index, call it in test wide1
 } //p.5 saving prev pc
 void IOR()
 {
