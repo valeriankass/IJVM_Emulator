@@ -3,12 +3,17 @@
 
 #define BYTE 1
 #define SHORT 2
-#define WORD 4
 
 #include "ijvm.h"
 #include "util.h"
+#include "binaryparser.h"
+#include "instructions.h"
+#include "stack.h"
+#include "frame.h"
 #include <stdint.h>
 #include <stdlib.h>
+#include <stdio.h>
+#include <unistd.h>
 
 int p_counter;
 byte_t instruction;

@@ -1,12 +1,4 @@
-#include "ijvm.h"
-#include "util.h"
-#include "binaryparser.h"
-#include "instructions.h"
-#include "stack.h"
-#include "frame.h"
 #include "machine.h"
-#include <stdio.h>
-#include <unistd.h>
 
 int init_ijvm(char *binary_file)
 {
@@ -39,13 +31,6 @@ int init_ijvm(char *binary_file)
     return 0;
 }
 
-
-/**
- * Returns the stack of the current frame as an array of integers,
- * with entry[0] being the very bottom of the stack and
- * entry[stack_size() - 1] being the top.
- **/
-
 void destroy_ijvm()
 {
     clear_binaryparser();
@@ -59,7 +44,7 @@ void run()
 }
 bool finished()
 {
-    if (&text.data[stack.size - 1] == NULL || instruction == OP_HALT || instruction == OP_ERR || instruction_is_valid()) return 1;
+    if (&text.data[stack.size - BYTE] == NULL || instruction == OP_HALT || instruction == OP_ERR || instruction_is_valid()) return 1;
     else return 0;
 }
 
@@ -86,114 +71,6 @@ word_t get_constant(int i) //work on it by transferring the byte_t to word_t
 int get_program_counter(void) //Returns the value of the program counter (as an offset from the first instruction).
 {
     return p_counter;
-}
-bool step(void) //perform one instruction and return true or false //move it somewhere else
-{
-    instruction = get_instruction();
-    switch (instruction)
-    {
-        case OP_BIPUSH :
-            printf("BIPUSH\n");
-            BIPUSH((int8_t)text.data[p_counter + 1]);
-            increase_p_counter_by(1); //might want to put it inside function BIPUSH
-            break;
-        case OP_DUP :
-            printf("DUP\n");
-            DUP();
-            break;
-        case OP_ERR :
-            printf("ERR\n");
-            ERR();
-            break;
-        case OP_GOTO :
-            printf("GOTO\n");
-            increase_p_counter_by(get_signed_offset_byte_size() - 1);
-            break;
-        case OP_HALT :
-            return false;
-            break;
-        case OP_IADD :
-            printf("IADD\n");
-            IADD();
-            break;
-        case OP_IAND :
-            printf("IAND\n");
-            IAND();
-            break;
-        case OP_IFEQ :
-            printf("IFEQ\n");
-            IFEQ();
-            break;
-        case OP_IFLT :
-            printf("IFLT\n");
-            IFLT();
-            break;
-        case OP_ICMPEQ :
-            printf("ICMPEQ\n");
-            ICMPEQ();
-            break;
-        case OP_IINC :
-            printf("IINC\n");
-            IINC();
-            break;
-        case OP_ILOAD :
-            printf("ILOAD\n");
-            ILOAD();
-            break;
-        case OP_INVOKEVIRTUAL :
-            printf("INVOKEVIRTUAL\n");
-            INVOKEVIRTUAL();
-            break;
-        case OP_IOR :
-            printf("IOR\n");
-            IOR();
-            break;
-        case OP_IRETURN :
-            printf("IRETURN\n");
-            IRETURN();
-            break;
-        case OP_ISTORE :
-            printf("ISTORE\n");
-            ISTORE();
-            break;
-        case OP_ISUB :
-            printf("ISUB\n");
-            ISUB();
-            break;
-        case OP_LDC_W :
-            printf("LDC_W\n");
-            LDC_W();
-            break;
-        case OP_NOP :
-            printf("NOP\n");
-            NOP();
-            break;
-        case OP_IN :
-            printf("IN\n");
-            IN();
-            break;
-        case OP_OUT :
-            printf("OUT\n");
-            OUT();
-            break;
-        case OP_POP :
-            printf("POP\n");
-            POP();
-            break;
-        case OP_SWAP :
-            printf("SWAP\n");
-            SWAP();
-            break;
-        case OP_WIDE :
-            printf("WIDE\n");
-            WIDE();
-            break;
-        default:
-            return 0;
-            break;
-    }
-    increase_p_counter_by(1);
-    return 1;
 }
 
 byte_t get_instruction() //return The value of the current instruction represented as a byte_t

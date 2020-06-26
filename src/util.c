@@ -1,5 +1,4 @@
 #include "util.h"
-#include "binaryparser.h"
 
 uint32_t swap_uint32(uint32_t num)
 {
@@ -35,7 +34,7 @@ short byte_to_signed_short(uint8_t *data)
 
 short get_signed_offset_byte_size()
 {
-    if (p_counter <= text.size) return byte_to_signed_short(&text.data[p_counter + 1]);//can modify so that there will be a variable that can be changed
+    if (p_counter <= text.size) return byte_to_signed_short(&text.data[p_counter + BYTE]);//can modify so that there will be a variable that can be changed
     else
     {
         fprintf(stderr, "The counter is larger or equal to the text block size.");
@@ -44,7 +43,7 @@ short get_signed_offset_byte_size()
 }
 unsigned short get_unsigned_offset_byte_size() //can modify so that there will be a variable that can be changed
 {
-    if (p_counter <= text.size) return byte_to_unsigned_short(&text.data[p_counter + 1]);
+    if (p_counter <= text.size) return byte_to_unsigned_short(&text.data[p_counter + BYTE]);
     else
     {
         fprintf(stderr, "The counter is larger or equal to the text block size.");

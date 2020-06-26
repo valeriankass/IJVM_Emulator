@@ -18,7 +18,7 @@ void push(int32_t word)
         stack.size *= 2;
         stack.array = realloc(stack.array, (size_t)stack.size * sizeof(word_t));
         if(stack.array == NULL) {
-          fprintf(stderr, "%s", "ERROR (push): stack.data == NULL\n");
+          fprintf(stderr, "The stack array is empty.");
           exit(1);
         }
     }
